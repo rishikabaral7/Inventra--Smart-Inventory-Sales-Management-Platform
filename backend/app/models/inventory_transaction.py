@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.database.base import Base
 
-class InventoryTransactions(Base):
+class InventoryTransaction(Base):
     __tablename__ = "inventory_transactions"
     
     id = Column(Integer, primary_key=True, index=True)
@@ -11,5 +11,5 @@ class InventoryTransactions(Base):
     transaction_type =Column(String, nullable=False,)
     quantity = Column(Integer, nullable=False,)
     created_at = Column(DateTime(timezone=True),server_default=func.now(),)
-    product = relationship("Product",backpopulates="transactions",)
+    products = relationship("Product",back_populates="transactions",)
     

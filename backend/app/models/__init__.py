@@ -3,3 +3,7 @@ from .product import Product
 from .inventory_transaction import InventoryTransaction
 from .sale import Sale
 from .sale_item import SaleItem
+from .category import Category
+from .supplier import Supplier
+from .purchase import Purchase
+from .purchase_item import PurchaseItem

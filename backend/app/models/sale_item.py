@@ -46,7 +46,7 @@ class SaleItem(Base):
         back_populates="sale_items",
     )
 
-    product = relationship(
+    products = relationship(
         "Product",
-        back_populates="sale_items",
+        back_populates="saleItems",
     )

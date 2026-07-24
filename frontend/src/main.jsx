@@ -10,9 +10,9 @@ import apolloClient from "./graphql/apolloClient.js";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <ApolloProvider client={apolloClient}>
-    <Provider store={store}>
-      <App />
-    </Provider>
-      </ApolloProvider>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </ApolloProvider>
   </StrictMode>,
 );

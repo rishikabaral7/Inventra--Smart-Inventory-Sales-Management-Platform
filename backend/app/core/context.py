@@ -1,12 +1,13 @@
-from app.database.session import SessionLocal
 from fastapi import Request
 
-async def get_context(request:Request):
-    db = SessionLocal()
-    try:
-        return{
-            "request": request,
-            "db":db,
-        }
-    finally:
-        db.close()
+from app.database.session import SessionLocal
+
+
+async def get_context(request: Request):
+    if not hasattr(request.state, 'db'):
+        request.state.db = SessionLocal()
+    
+    return {
+        "request": request,
+        "db": request.state.db,
+    }

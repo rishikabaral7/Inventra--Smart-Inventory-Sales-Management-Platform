@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from app.models import User
 
 class UserRepository:
-    
+
     @staticmethod
     def get_by_email(db:Session,email:str,):
         return(db.query(User).filter(User.email== email).first())
@@ -18,3 +18,15 @@ class UserRepository:
     def get_by_id(db:Session, user_id:int):
         return db.query(User).filter(User.id == user_id).first()
     
+    @staticmethod
+    def get_all(db: Session):
+        return db.query(User).all()
+
+    @staticmethod
+    def update_role(db: Session, user_id: int, role: str):
+        user = db.query(User).filter(User.id == user_id).first()
+        if user:
+            user.role = role.upper()
+            db.commit()
+            db.refresh(user)
+        return user

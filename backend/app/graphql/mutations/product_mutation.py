@@ -3,7 +3,9 @@ from strawberry.types import Info
 
 from app.graphql.input.product_input import ProductInput
 from app.graphql.types.product_type import ProductType
+
 from app.services.product_service import ProductService
+from app.auth.permissions import require_roles
 
 
 @strawberry.type
@@ -17,6 +19,14 @@ class ProductMutation:
     ) -> ProductType:
 
         db = info.context["db"]
+        request = info.context["request"]
+        authorization = request.headers.get("Authorization")
+
+        require_roles(
+            db=db,
+            authorization=authorization,
+            allowed_roles=["OWNER", "ADMIN", "MANAGER", "INVENTORY_MANAGER"],
+        )
 
         product = ProductService.create_product(
             db=db,
@@ -35,5 +45,3 @@ class ProductMutation:
             price=product.price,
             quantity=product.quantity,
         )
-        
-        

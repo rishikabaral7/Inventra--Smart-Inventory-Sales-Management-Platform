@@ -4,21 +4,52 @@ from app.auth.jwt_handler import decode_access_token
 from app.repositories.user_repository import UserRepository
 
 
-def get_current_user(db:Session, authorization:str,):
+def get_current_user(db: Session, authorization: str):
     if not authorization:
         raise Exception("Authorization header missing")
-    token = authorization.replace("Bearer ","")
+    token = authorization.replace("Bearer ", "")
     payload = decode_access_token(token)
     user_id = payload.get("sub")
     if not user_id:
         raise Exception("Invalid token")
     
-    user = UserRepository.get_by_id(db, int(user_id),)
+    user = UserRepository.get_by_id(db, int(user_id))
     
     if not user:
         raise Exception("User not found")
     
+    if "role" in payload:
+        user.role = payload["role"]
+    
     return user
+
+
+def get_current_user_from_token(authorization: str):
+    if not authorization:
+        raise Exception("Authorization header missing")
+    token = authorization.replace("Bearer ", "")
+    payload = decode_access_token(token)
     
+    user_id = payload.get("sub")
+    if not user_id:
+        raise Exception("Invalid token")
     
+    return {
+        "id": int(user_id),
+        "role": payload.get("role"),
+    }
+
+
+def require_authentication(authorization: str):
+    if not authorization:
+        raise Exception("Authentication required")
     
+    if not authorization.startswith("Bearer "):
+        raise Exception("Invalid authorization header format")
+    
+    token = authorization.replace("Bearer ", "")
+    
+    try:
+        decode_access_token(token)
+    except Exception:
+        raise Exception("Invalid or expired token")

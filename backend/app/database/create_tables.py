@@ -1,6 +1,6 @@
 from app.database.connection import engine
 from app.database.base import Base
-from app.models import User
+import app.models
 
 Base.metadata.create_all(bind=engine)
 
